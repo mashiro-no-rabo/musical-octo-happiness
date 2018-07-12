@@ -28,13 +28,13 @@ docker exec rabbit2 rabbitmqctl start_app
 
 # create queue on rabbit2 (through UI)
 
-# start app
+iex -S mix
 
 # check things running
 
 docker rm -f rabbit2
 
-# observer same error
+# observer "home node" error
 
 docker exec rabbit1 rabbitmqctl forget_cluster_node rabbit@rabbit2
 
@@ -42,7 +42,7 @@ docker exec rabbit1 rabbitmqctl forget_cluster_node rabbit@rabbit2
 
 # queue is gone
 
-# now can recreate queue...
+# if still retrying, now can recreate queue...
 
 
 # with (not clean) try-catch retry loop - if restart app -, duplicated connection, 1 channel, new queue has no consumer
