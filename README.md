@@ -2,6 +2,8 @@
 
 Example of cleanly auto-reconnect durable queue to RabbitMQ, especially in times of cluster membership changes.
 
+[Connection should be shared, channel should be bound to queue(s).](https://www.rabbitmq.com/tutorials/amqp-concepts.html#amqp-channels)
+
 Tested with local cluster w/ docker:
 
 ```
