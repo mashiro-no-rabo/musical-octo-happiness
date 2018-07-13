@@ -9,7 +9,7 @@ Tested with local cluster w/ docker:
 ```
 docker network create rabbit
 
-docker run -d --network rabbit -h node1.rabbit --name rabbit1  -p "5672:5672" -p "15672:15672" -e RABBITMQ_NODENAME='rabbit@rabbit1' -e RABBITMQ_ERLANG_COOKIE='adfsder' rabbitmq:alpine
+docker run -d --network rabbit --name rabbit1  -p "5672:5672" -p "15672:15672" -e RABBITMQ_NODENAME='rabbit@rabbit1' -e RABBITMQ_ERLANG_COOKIE='adfsder' rabbitmq:alpine
 
 docker exec rabbit1 rabbitmq-plugins enable rabbitmq_management
 docker exec rabbit1 rabbitmqctl stop_app
@@ -18,7 +18,7 @@ docker exec rabbit1 rabbitmqctl start_app
 docker exec rabbit1 rabbitmqctl add_vhost xyz
 docker exec rabbit1 rabbitmqctl set_permissions -p xyz guest ".*" ".*" ".*"
 
-docker run -d --network rabbit -h node2.rabbit --name rabbit2 -e RABBITMQ_NODENAME='rabbit@rabbit2' -e RABBITMQ_ERLANG_COOKIE='adfsder' rabbitmq:alpine
+docker run -d --network rabbit --name rabbit2 -e RABBITMQ_NODENAME='rabbit@rabbit2' -e RABBITMQ_ERLANG_COOKIE='adfsder' rabbitmq:alpine
 
 docker exec rabbit2 rabbitmq-plugins enable rabbitmq_management
 docker exec rabbit2 rabbitmqctl stop_app
@@ -64,7 +64,7 @@ docker exec rabbit1 rabbitmqctl forget_cluster_node rabbit@rabbit2
 
 # to add another node into the cluster
 
-docker run -d --network rabbit -h node3.rabbit --name rabbit3 -e RABBITMQ_NODENAME='rabbit@rabbit3' -e RABBITMQ_ERLANG_COOKIE='adfsder' rabbitmq:alpine
+docker run -d --network rabbit --name rabbit3 -e RABBITMQ_NODENAME='rabbit@rabbit3' -e RABBITMQ_ERLANG_COOKIE='adfsder' rabbitmq:alpine
 
 docker exec rabbit3 rabbitmq-plugins enable rabbitmq_management
 docker exec rabbit3 rabbitmqctl stop_app
