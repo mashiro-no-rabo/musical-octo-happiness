@@ -84,7 +84,7 @@ docker exec rabbit2 rabbitmqctl stop_app
 docker exec rabbit2 rabbitmqctl join_cluster rabbit@rabbit1
 docker exec rabbit2 rabbitmqctl start_app
 
-# need proxy for 5672 port "transfer" after removing rabbit2
+# need proxy (nginx/HAProxy) for 5672 port "transfer" after removing rabbit2
 
 
 # to add another node into the cluster
