@@ -93,7 +93,7 @@ defmodule TestDurableQueue.Tester do
   end
 
   defp connect(_, state) do
-    if state.connection do
+    if state.connection && Process.alive?(state.connection.pid) do
       {:ok, state.connection}
     else
       AMQP.Connection.open(
