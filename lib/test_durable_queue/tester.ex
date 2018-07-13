@@ -69,21 +69,24 @@ defmodule TestDurableQueue.Tester do
         {:ok, chan} = AMQP.Channel.open(conn)
 
         try do
-          IO.puts("trying to declare")
+          IO.puts("########################")
+          IO.puts("## trying to declare ###")
+          IO.puts("########################")
           AMQP.Queue.declare(chan, @queue, durable: true)
+          IO.puts("########################")
+          IO.puts("### declare succeed! ###")
+          IO.puts("########################")
           AMQP.Basic.consume(chan, @queue, nil, no_ack: true)
-          IO.puts("declare succeed!")
+          IO.puts("########################")
+          IO.puts("### consume succeed! ###")
+          IO.puts("########################")
           %__MODULE__{opts: opts, connection: conn}
         catch
           :exit, value ->
-            IO.puts("======")
-            IO.puts("======")
-            IO.puts("======")
-            IO.puts("declare failed, retrying...")
+            IO.puts("==============================")
+            IO.puts("===   declare retrying...  ===")
             IO.inspect(value)
-            IO.puts("======")
-            IO.puts("======")
-            IO.puts("======")
+            IO.puts("==============================")
             Process.send_after(self(), :setup, 10_000)
             %__MODULE__{opts: opts, connection: conn, channel: chan}
         end
