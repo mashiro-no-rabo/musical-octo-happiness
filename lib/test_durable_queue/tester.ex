@@ -31,18 +31,21 @@ defmodule TestDurableQueue.Tester do
     {:noreply, new_state}
   end
 
-  def handle_info({:DOWN, _, :process, _pid, _reason}, state) do
-    IO.puts("DOWN?")
-    Process.send_after(self(), :setup, 3_000)
-    # TODO: cleanup existing connection and channel
-    {:noreply, state}
+  def handle_info({:DOWN, _, :process, _pid, _reason}, _) do
+    IO.puts("DOWN...")
+    Process.send_after(self(), :setup, 10_000)
+    {:noreply, %__MODULE__{opts: nil}}
   end
 
   def handle_info({:basic_cancel, _}, state) do
+    IO.puts("received cancel")
     {:stop, :normal, state}
   end
 
-  def handle_info(_, state), do: {:noreply, state}
+  def handle_info(info, state) do
+    IO.puts("received info: #{Kernel.inspect(info)}")
+    {:noreply, state}
+  end
 
   @impl true
   def terminate(_, state) do
@@ -81,12 +84,12 @@ defmodule TestDurableQueue.Tester do
             IO.puts("======")
             IO.puts("======")
             IO.puts("======")
-            Process.send_after(self(), :setup, 3_000)
+            Process.send_after(self(), :setup, 10_000)
             %__MODULE__{opts: opts, connection: conn, channel: chan}
         end
 
       {:error, _} ->
-        Process.send_after(self(), :setup, 3_000)
+        Process.send_after(self(), :setup, 10_000)
 
         %__MODULE__{opts: opts}
     end
