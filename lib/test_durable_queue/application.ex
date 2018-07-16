@@ -4,7 +4,7 @@ defmodule TestDurableQueue.Application do
 
   def start(_type, _args) do
     children = [
-      {TestDurableQueue.Tester, []}
+      {TestDurableQueue.Tester, [username: "guest", password: "guest"]}
     ]
 
     opts = [strategy: :one_for_one, name: TestDurableQueue.Supervisor]
