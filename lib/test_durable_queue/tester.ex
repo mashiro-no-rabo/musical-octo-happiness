@@ -20,7 +20,6 @@ defmodule TestDurableQueue.Tester do
 
   @impl true
   def init(opts) do
-    Process.flag(:trap_exit, true)
     Process.send(self(), :setup, [])
 
     {:ok, %__MODULE__{opts: opts}}
@@ -35,18 +34,13 @@ defmodule TestDurableQueue.Tester do
   def handle_info({:DOWN, _, :process, _pid, _reason}, state) do
     :lager.log(:warning, self(), "connection is down")
     Process.send_after(self(), :setup, 10_000)
-    {:noreply, %__MODULE__{opts: state.opts}}
-  end
-
-  def handle_info({:EXIT, _pid, _reason}, state) do
-    :lager.log(:warning, self(), "linked exit signal")
-    Process.send_after(self(), :setup, 10_000)
-    {:noreply, %__MODULE__{opts: state.opts}}
+    {:noreply, state}
   end
 
   def handle_info({:basic_cancel, arg}, state) do
-    :lager.log(:notice, self(), "received cancel: #{Kernel.inspect(arg)}")
-    {:stop, :normal, state}
+    :lager.log(:warning, self(), "basic_cancel (queue down?): #{Kernel.inspect(arg)}")
+    Process.send_after(self(), :setup, 10_000)
+    {:noreply, state}
   end
 
   def handle_info(info, state) do
@@ -78,12 +72,12 @@ defmodule TestDurableQueue.Tester do
         AMQP.Basic.consume(chan, @queue, nil, no_ack: true)
         :lager.log(:notice, self(), "consume succeed!")
 
-        %__MODULE__{opts: state.opts, connection: conn}
+        %__MODULE__{opts: state.opts, connection: conn, channel: chan}
       catch
         :exit, value ->
           :lager.log(:warning, self(), "declare failed: #{Kernel.inspect(value)}")
           Process.send_after(self(), :setup, 10_000)
-          %__MODULE__{opts: state.opts, connection: conn, channel: chan}
+          %__MODULE__{opts: state.opts, connection: conn}
       end
     else
       {:error, _} ->
