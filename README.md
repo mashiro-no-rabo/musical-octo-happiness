@@ -2,7 +2,7 @@
 
 Example of cleanly auto-reconnect durable queue to RabbitMQ, especially in times of cluster membership changes.
 
-[Connection should be shared, channel should be bound to queue(s).](https://www.rabbitmq.com/tutorials/amqp-concepts.html#amqp-channels)
+[Connection should be shared, channel should be bound to queue(s) - "fail as a unit".](https://www.rabbitmq.com/tutorials/amqp-concepts.html#amqp-channels)
 
 Tested with local cluster w/ docker:
 
@@ -35,6 +35,8 @@ docker exec rabbit2 rabbitmqctl start_app
 # check things running
 
 docker rm -f rabbit2
+
+# or `docker stop rabbit2`, then you can `docker start rabbit2` later to recover cluster
 
 # observer "home node" error
 
