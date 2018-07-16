@@ -12,15 +12,13 @@ defmodule TestDurableQueue.MixProject do
   end
 
   def application do
-    [
-      mod: {TestDurableQueue.Application, []}
-    ]
+    [mod: {TestDurableQueue.Application, []}, extra_applications: [:logger]]
   end
 
   defp deps do
     [
       {:amqp, "~> 1.0"},
-      {:ranch_proxy_protocol, github: "heroku/ranch_proxy_protocol", override: true}
+      {:ranch_proxy_protocol, "~> 2.0", override: true}
     ]
   end
 end
