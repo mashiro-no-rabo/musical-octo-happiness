@@ -30,7 +30,7 @@ docker exec rabbit2 rabbitmqctl start_app
 
 # create queue on rabbit2 (through UI)
 
-iex -S mix
+# `iex -S mix` or start your test app
 
 # check things running
 
