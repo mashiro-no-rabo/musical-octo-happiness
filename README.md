@@ -2,13 +2,22 @@
 
 Example of cleanly auto-reconnect durable queue to RabbitMQ, especially in times of cluster membership changes.
 
+## Features
+
+- Reuse connection: no reconnect (recreation of `Connection`) unless the connected node (on AMQP side) fails
+- Exactly one channel, and resilent to queue failure (queue down due to RabbitMQ cluster changes)
+- Useful logging (with `lager` because it's bundled with `amqp_client`)
+- Example of passing in options through `Supervisor` layers
+
+## Other Notes
+
 [Connection should be shared, channel should be bound to queue(s) - "fail as a unit".](https://www.rabbitmq.com/tutorials/amqp-concepts.html#amqp-channels)
 
 [`basic.cancel` requires configuration in client properties (enabled by most client libraries by default, including `amqp` for Elixir, and `py-amqp` for Python)](https://www.rabbitmq.com/consumer-cancel.html)
 
 [When HA queues failover, we can request a cancellation. By default there's no notification.](https://www.rabbitmq.com/ha.html#cancellation)
 
-Tested with local cluster w/ docker:
+Ruunign a local RabbitMQ cluster with docker:
 
 ```
 docker network create rabbit
